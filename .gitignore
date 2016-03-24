@@ -1,0 +1,5 @@
+/build/
+/target/
+/project/target
+/project/project
+.ensime*
