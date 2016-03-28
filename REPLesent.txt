@@ -1,1 +1,166 @@
-| \gIntro to Scala
+| \gIntroduction to Scala
+
+/\b🌉 \s
+
+| A Bridge Between
+
+| Object Oriented Programming and Functional Programming
+---
+| \gIdeology War?
+
+/\b😠 \s
+
+--
+\**\s Programmers just want \ymodularity\s and \yreusibility\s
+
+--
+\**\s Ability to take the code apart into small modules and put them
+  together in a different way (Unix philosophy 🏆 ).
+
+--
+\**\s OOP and FP both provide a set of abstractions to achieve that.
+
+--
+\**\s More languages are becoming hybrid, no silver bullet really.
+
+---
+\gObject Oriented Programming
+
+/\b-\s
+
+--
+\**\s Based on the concept of \yobjects\s.
+
+--
+\**\s \yObjects\s may or may not contain data (\yattributes\s) or
+  code (\ymethods\s).
+
+--
+\**\s \yMethods\s can get/set \yattributes\s within an \yobject\s.
+
+--
+\**\s Programs are made out of \yobjects\s interacting with each other.
+
+---
+\gOOP's take on modularity and reusibility
+
+/\b-\s
+
+--
+\**\s \yObjects\s encapsulate complex internal structures and
+  interact with each other using \ymessage passing\s or \ydynamic\s
+  \ydispatch\s
+
+--
+\**\s Combine \yobjects\s with \yinheritance\s, \yobject\s
+  \ycomposition\s, \ydelegation\s
+
+--
+\**\s Subtype polymorphism (seperation of concerns)
+
+---
+\gFunctional Programming
+
+/\b-\s
+
+--
+\**\s Emphasize on \ypure functions\s (\yreferential transparency\s)
+
+--
+\**\s Promote simple and \yimmutable\s data structures (primitive data
+  types and \yalgibraic data types\s)
+
+--
+\**\s Try to write large piece of side effects free code by composing
+  pure functions.
+
+--
+\**\s \ySide effects\s are preferrably pushed as outmost as possible.
+
+---
+\gFP's take on modularity and reusibility
+
+/\b-\s
+
+--
+\**\s \yPure functions\s are building blocks of the programs written
+  in functional style.
+
+--
+\**\s No side effects, meaning that those blocks are independent of
+  each other, making it easy to combine them together.
+
+--
+\**\s First class / higher order functions are the super glues that
+  enables function composition.
+
+--
+\**\s Reusible in concurrent settings.
+
+---
+\g A Simple Example:
+
+/\b-\s
+
+
+```
+def lowerCase(s: String) = s.filter(_.isLower)
+def count(s: String) = s.length
+def lowerCaseCount = lowerCase _ andThen count _
+
+lowerCaseCount("aBc")
+```
+
+---
+\gCompare OOP and FP's attempts to modularity and reusibility
+
+/\b-\s
+
+--
+\**\s Pure functions over simple data structures compose better than
+  objects because objects are opaque data types that could be mutable.
+
+--
+\**\s OOP shines in domains where problems can be natually modelled as
+  objects (w/o mutable states). e.g. GUI, Actors (\rErlang OTP\s, Akka)
+
+--
+\**\s Still, suprisingly many problems can be solved by using simple
+  data types with functions. Do the cost of modeling every problem
+  with objects really makes up for the lost of composibility?
+
+--
+\**\s FP is sort of like turning objects inside out. '\yD\s'
+  (Dependency Inversion) in the '\ySOLID\s' principle.
+
+--
+\**\s Both should have a place, (Erlang, Scala 😃 ).
+
+---
+\gScala is a pure OO language
+
+/\b-\s
+
+--
+\**\s Everything is object
+
+```
+val i = 5
+assert(i.toString == "5")
+```
+
+--
+```
+val l = List(1,2,3)
+assert(l.length == 3)
+```
+
+--
+```
+def multiIA(x: Int) = i * x
+val multiIB = new Function1[Int, Int] {
+  def apply(x: Int): Int = i * x
+}
+assert(multiIA(2) == multiIB(2))
+
+```
