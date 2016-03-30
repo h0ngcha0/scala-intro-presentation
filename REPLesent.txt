@@ -11,17 +11,28 @@
 /\b😠 \s
 
 --
-\**\s We want \ymodularity\s and \yreusibility\s
+\**\s We want \ymodularity\s and \yreusability\s
 
 --
-\**\s Ability to take the code apart into small modules and put them
-  together in a different way (Unix philosophy \b🏆 \s).
+\**\s Ability to split code into small modules and put them back
+  together in a different way (Unix philosophy \b💯 \s).
 
 --
 \**\s OOP and FP both provide a set of abstractions to achieve that.
 
 --
-\**\s No silver bullet really and more languages are becoming hybrid.
+\**\s No silver bullet (\b\_https://en.wikipedia.org/wiki/No_Silver_Bullet\s\s)
+
+---
+\gPlan
+
+\**\s What OOP and FP have offered when it comes to modularity and resusability
+
+\**\s Some of the features that Scala offers to contribute to that goal.
+
+\**\s Examples of how Scala implements FP on top of OOP
+
+\**\s Why we \r💚 \s Scala
 
 ---
 \gObject Oriented Programming
@@ -41,7 +52,7 @@
 \**\s Programs are made out of \yobjects\s interacting with each other.
 
 ---
-\gOOP's take on modularity and reusibility
+\gOOP's take on modularity and reusability
 
 /\b-\s
 
@@ -69,14 +80,14 @@
   types and \yalgibraic data types\s)
 
 --
-\**\s Try to write large piece of side effects free code by composing
+\**\s Aim for writing large piece of side effects free code by composing
   pure functions.
 
 --
-\**\s \ySide effects\s are preferrably pushed as outmost as possible.
+\**\s Side effects are preferrably pushed as outmost as possible.
 
 ---
-\gFP's take on modularity and reusibility
+\gFP's take on modularity and reusability
 
 /\b-\s
 
@@ -85,7 +96,7 @@
   the programs written in functional style.
 
 --
-\**\s No side effects, meaning that those blocks are independent of
+\**\s No side effects meaning that those blocks are independent of
   each other, making it easy to combine them together.
 
 --
@@ -93,7 +104,7 @@
   enables function composition.
 
 --
-\**\s Reusible in concurrent settings.
+\**\s Reusable in the concurrent settings.
 
 ---
 \g A simple example of function composition:
@@ -102,7 +113,7 @@
 
 --
 ```
-def lowerCase(s: String) = s.filter(_.isLower)
+def lowerCase(s: String) = s.filter(c => c.isLower)
 ```
 --
 ```
@@ -119,7 +130,7 @@ lowerCaseCount("aBc")
 ```
 
 ---
-\gCompare OOP and FP's attempts to modularity and reusibility
+\gCompare OOP and FP's attempts to modularity and reusability
 
 /\b-\s
 
@@ -129,19 +140,17 @@ lowerCaseCount("aBc")
 
 --
 \**\s OOP shines in domains where problems can be natually modelled as
-  objects (w/o mutable states). e.g. GUI?, Actors (\rErlang OTP\s, Akka)
+  objects (w/o mutable states). e.g. GUI?, Actors (Erlang, Akka)
 
 --
 \**\s Still, suprisingly many problems can be solved by using simple
-  data types with functions. Do the cost of modeling every problem
-  with objects really makes up for the lost of composibility?
+  data types with functions.
+
+\**\s Q: Do the cost of modeling every problem with objects really
+  makes up for the potential lost of composibility?
 
 --
-\**\s FP is sort of like turning objects inside out. '\yD\s'
-  (Dependency Inversion) in the '\ySOLID\s' principle.
-
---
-\**\s Both should have a place, (Scala \b😃 \s).
+\**\s Both should have a place in our toolbox, (Scala \b😃 \s).
 
 ---
 \gScala is a pure OO language (everything is an object)
@@ -152,7 +161,7 @@ lowerCaseCount("aBc")
 
 ```
 val b = true                     // no primitive types
-assert(i.toString == "true")
+assert(b.toString == "true")
 
 val i = if (b) 5 else 6          // everything is expression
 assert(i.toString == "5")
@@ -205,14 +214,13 @@ abstract class Hero {
 }
 
 trait Gun { def fighting: String = "shooting" }
-
 trait Knife { def fighting: String = "stubbing" }
 ```
 
 --
 ```
 class HeroWithGun extends Hero with Gun {}
-class HeroWithGunAndKnife extends Hero with Gun {}  // multi-inheritance
+class HeroWithGunAndKnife extends Hero with Gun with Knife {}  // multi-inheritance
 ```
 
 --
@@ -331,27 +339,48 @@ all(3)
   \*-\s OOP focus on objects, no \ystandard\s way to decompose.
 
 ---
-\gThe \yunapply\s method
+\gPattern matching (cont.)
 
 /\b-\s
-       
---
-```
-val some5: Option[Int] = Some(5)
-val none: Option[Int] = None
-```
 
 --
 ```
-class Person(val name: String, val gender: String, val title: String) {}
-object Person {
-  def unapply(p: Person) = Some((p.name, p.title))
+val helloWorldWithTuple = ("hello", "world") match {
+   case (a, b) => s"$a, $b"
 }
 ```
 
 --
 ```
+val some5: Option[Int] = Some(5)
+val none: Option[Int] = None
+
+some5 match {
+   case Some(v) => s"value is $5"
+   case None    => "no value!"
+}
+```
+
+---
+\gPattern match on "regular class"
+
+/\b-\s
+       
+--
+```
+class Person(val name: String, val gender: String, val title: String) {}
+```
+
+--
+```
 val person = new Person("obama", "male", "president")
+```
+
+--
+```
+object Person {
+  def unapply(p: Person) = Some((p.name, p.title))
+}
 ```
 
 --
@@ -580,8 +609,6 @@ val futureSum = for {
 --
 \**\s What if future contains options (\yOptionT\s)
 
-\rFIXME, Example code\s
-
 --
 \**\s More layers of boxes is kind of similiar to complex objects in
   OOP, making the program hard to understand, modify and maintain.
@@ -592,9 +619,26 @@ val futureSum = for {
 /\b-\s
 
 --
-\**\s Scala provides tools and abstractions from both OOP and FP world
-to write better software, because there is really no silver bullet.
+\**\s We \r💚 \s Scala because:
+--
+  \*-\s It tries to implement one programming paradigm on top of
+    another, therefore provides a lot of insights.
+
+--
+  \*-\s More tools and especially more views of the world is helpful
+    to build better software.
+
+--
+  \*-\s Scala offers many ways of doing things and because the world
+    \*is\s a complex place, this is not always a bad thing
+    (e.g. concurrency in Scala)
+
 
 --
 \**\s Many more to explore: \yimplicits\s, \ylazy evaluation\s, \ycall\s
   \yby name\s, \ymacros\s, etc
+
+---
+\g\*Thanks!\s
+
+Questions?
